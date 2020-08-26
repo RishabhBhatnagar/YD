@@ -56,8 +56,8 @@ def save(url, filename):
 
 def get_available_title(n):
     while True:
-        fname = '{}.mp4'.format(n)
-        if not os.path.isfile(get_abs_filepath(fname)):
+        fname = get_abs_filepath('{}.mp4'.format(n))
+        if not os.path.isfile(fname):
             return fname
         n += 1
 
@@ -90,8 +90,16 @@ def download(video_list):
         print('-'*15)
 
 
+def get_playlist_url(url):
+    a = re.findall('(?<=list=).*', url)
+    id = a[0].split('&')[0]
+    return 'https://www.youtube.com/playlist?list={}'.format(id)
+
+
 def main():
-    vid_list = list(get_videos_href(input('Enter playlist url: ')))
+    url = input('Enter playlist url: ')
+    play_url = get_playlist_url(url)
+    vid_list = list(get_videos_href(play_url))
     download(vid_list)
 
 
